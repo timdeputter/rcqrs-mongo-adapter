@@ -15,9 +15,13 @@ module RcqrsMongoAdapter
       @stored_events.insert(s)
     end
     
-    def self.load_events(aggregate_id)
-      @stored_events.find(:aggregateroot_id => aggregate_id).order(:created_at).collect {|event| Rcqrs::BaseEvent.new(event.data)}
+    def load_events(aggregate_id)
+      @stored_events.find(:aggregate_id => aggregate_id).order(:created_at).collect {|persisted_event| restore(persisted_event)}
     end
     
+    def restore(persisted_event)
+      eval(persisted_event[:type]).restore_from(persisted_event[:data])
+    end
   end  
+  
 end

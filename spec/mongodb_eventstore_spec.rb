@@ -6,7 +6,7 @@ end
 
 class DummyMongo
    
-  attr_reader :name, :data, :ordering, :query
+  attr_accessor :name, :data, :ordering, :query
     
   def collection(name)
     @name = name
@@ -24,7 +24,7 @@ class DummyMongo
 
   def order(ordering)
     @ordering = ordering
-    self
+    [@data]
   end
 end
 
@@ -51,8 +51,22 @@ describe RcqrsMongoAdapter::Eventstore do
   
   context "querying of events" do
     
-    before do
-      @mongo.stub!(:order)
+     before do
+       @mongo.data = {data: {name: "tim"}, type: "TestEvent"}
+     end
+        
+    it "queries for the events for the given aggregate_id" do
+      @store.load_events("aggregate_id")
+      @mongo.query.should == {aggregate_id: "aggregate_id"}
+    end
+    
+    it "orders the result by create time" do
+      @store.load_events("aggregate_id")
+      @mongo.ordering.should == :created_at      
+    end
+    
+    it "restores the events" do
+      @store.load_events("aggregate_id").should == [TestEvent.new(name: "tim")]      
     end
     
   end
