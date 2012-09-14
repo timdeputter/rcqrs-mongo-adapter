@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.version     = RcqrsMongoAdapter::VERSION
   s.authors     = ["Tim de Putter"]
   s.email       = ["tim.de.putter83@googlemail.com"]
-  s.homepage    = "nohomebage"
   s.summary     = %q{Adaptes rcqrs to mongodb}
   s.description = %q{Adaptes rcqrs to mongodb}
 
@@ -20,9 +19,8 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
-  s.add_development_dependency "rspec-spies"
   s.add_runtime_dependency "rcqrs"
-  s.add_development_dependency "activemodel"
+  s.add_runtime_dependency "activemodel"
 
   
 end

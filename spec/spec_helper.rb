@@ -6,6 +6,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require_relative "../lib/rcqrs_mongo_adapter"
+require_relative "dummy_mongo"
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

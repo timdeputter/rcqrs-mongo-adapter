@@ -1,6 +1,7 @@
 
 require "rcqrs"
 require "rcqrs_mongo_adapter/eventstore"
+require "rcqrs_mongo_adapter/readmodeldatabase"
 require "rcqrs_mongo_adapter/version"
 
 module RcqrsMongoAdapter
