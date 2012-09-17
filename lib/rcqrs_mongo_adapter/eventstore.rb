@@ -7,6 +7,7 @@ module RcqrsMongoAdapter
     end
     
     def store(aggregate_id, event)
+      puts "storing events in mongodb"
       s = Hash.new
       s[:aggregate_id] = aggregate_id
       s[:data] = event.data
