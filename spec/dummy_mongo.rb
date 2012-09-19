@@ -8,7 +8,7 @@ class DummyMongo
   end
   
   def insert(data)
-    @data = data
+    @data = data.inject({}){|memo,(k,v)| memo[k.to_s] = v; memo}
   end
   
   def find(query)
