@@ -27,9 +27,9 @@ describe RcqrsMongoAdapter::Eventstore do
   
   context "querying of events" do
     
-     before do
-       @mongo.data = {data: {name: "tim"}, type: "TestEvent"}
-     end
+    before do
+      @mongo.data = {data: {name: "tim"}, type: "TestEvent"}
+    end
         
     it "queries for the events for the given aggregate_id" do
       @store.load_events("aggregate_id")

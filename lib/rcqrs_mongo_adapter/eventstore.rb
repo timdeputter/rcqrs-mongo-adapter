@@ -2,6 +2,7 @@
 module RcqrsMongoAdapter
 
   class Eventstore
+    
     def initialize(mongodb)
       @stored_events = mongodb.collection("StoredEvents")
     end
@@ -17,12 +18,16 @@ module RcqrsMongoAdapter
     end
     
     def load_events(aggregate_id)
-      @stored_events.find(:aggregate_id => aggregate_id).order(:created_at).collect {|persisted_event| restore(persisted_event)}
+      puts "Eventstore.load_events 1"
+      return @stored_events.find(:aggregate_id => aggregate_id).sort(:created_at).to_a.collect {|persisted_event| restore(persisted_event)}
+      puts "Eventstore.load_events 2"
     end
     
     def restore(persisted_event)
+      puts "Eventstore.restore #{persisted_event}"
       eval(persisted_event[:type]).restore_from(persisted_event[:data])
     end
+    
   end  
   
 end

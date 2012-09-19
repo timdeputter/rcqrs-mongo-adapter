@@ -16,7 +16,7 @@ class DummyMongo
     self
   end
 
-  def order(ordering)
+  def sort(ordering)
     @ordering = ordering
     [@data]
   end
