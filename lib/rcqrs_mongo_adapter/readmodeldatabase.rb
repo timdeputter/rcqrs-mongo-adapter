@@ -6,27 +6,31 @@ module RcqrsMongoAdapter
     end
       
     def insert readmodel, data
-      @database.collection(readmodel.to_s).insert(data)
+      @database.collection(readmodel.to_s).insert(convert(data))
     end
     
     def find_one(readmodel, parameters)
-      @database.collection(readmodel.to_s).find_one(parameters)
+      @database.collection(readmodel.to_s).find_one(convert(parameters))
     end
     
     def find(readmodel,parameters,options = nil)
       if options  
-        @database.collection(readmodel.to_s).find(parameters,options)
+        @database.collection(readmodel.to_s).find(convert(parameters),options)
       else
-        @database.collection(readmodel.to_s).find(parameters)        
+        @database.collection(readmodel.to_s).find(convert(parameters))        
       end    
     end
     
     def update(readmodel,selector,data)
-      @database.collection(readmodel.to_s).update(selector,data)
+      @database.collection(readmodel.to_s).update(convert(selector),convert(data))
     end
     
     def delete_all(readmodel,selector)
-      @database.collection(readmodel.to_s).remove(selector)
+      @database.collection(readmodel.to_s).remove(convert(selector))
+    end
+    
+    def convert(data_set)
+      RcqrsMongoAdapter::KeysToStringsConverter.new(data_set).convert()
     end
     
   end
