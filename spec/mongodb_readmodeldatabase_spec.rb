@@ -23,8 +23,10 @@ describe RcqrsMongoAdapter::Readmodeldatabase do
     @readmodel_db.find(:some_model,{lastname: "de Putter"})    
   end
   
-  it "should allow to specify query options" do
-    on_collection("some_model").should_do(:find).with({"lastname" => "de Putter"},{sort: :lastname})
+  it "should allow to specify sorting of query results" do
+    @mongo.stub!(find: @mongo)
+    on_collection("some_model").should_do(:find).with({"lastname" => "de Putter"})
+    @mongo.should_receive(:sort).with(:lastname)
     @readmodel_db.find(:some_model,{"lastname" => "de Putter"},{sort: :lastname})        
   end
   

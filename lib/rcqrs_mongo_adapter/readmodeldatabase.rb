@@ -15,10 +15,20 @@ module RcqrsMongoAdapter
     
     def find(readmodel,parameters,options = nil)
       if options  
-        convert_back(@database.collection(readmodel.to_s).find(convert(parameters),options))
+        convert_back(find_with_options(readmodel, parameters,options))
       else
-        convert_back(@database.collection(readmodel.to_s).find(convert(parameters)))        
+        convert_back(find_without_options(readmodel,parameters))        
       end    
+    end
+    
+    def find_with_options(readmodel, parameters, options)
+      options.each do |k,v|
+        @database.collection(readmodel.to_s).find(convert(parameters)).send(k,v)
+      end        
+    end
+    
+    def find_without_options(readmodel,parameters)
+      @database.collection(readmodel.to_s).find(convert(parameters))
     end
     
     def update(readmodel,selector,data)
