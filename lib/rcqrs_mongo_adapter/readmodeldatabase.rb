@@ -10,14 +10,14 @@ module RcqrsMongoAdapter
     end
     
     def find_one(readmodel, parameters)
-      @database.collection(readmodel.to_s).find_one(convert(parameters))
+      convert_back(@database.collection(readmodel.to_s).find_one(convert(parameters)))
     end
     
     def find(readmodel,parameters,options = nil)
       if options  
-        @database.collection(readmodel.to_s).find(convert(parameters),options)
+        convert_back(@database.collection(readmodel.to_s).find(convert(parameters),options))
       else
-        @database.collection(readmodel.to_s).find(convert(parameters))        
+        convert_back(@database.collection(readmodel.to_s).find(convert(parameters)))        
       end    
     end
     
@@ -29,8 +29,14 @@ module RcqrsMongoAdapter
       @database.collection(readmodel.to_s).remove(convert(selector))
     end
     
+    private
+    
     def convert(data_set)
       RcqrsMongoAdapter::KeysToStringsConverter.new(data_set).convert()
+    end
+    
+    def convert_back(data_set)
+      RcqrsMongoAdapter::KeysToStringsConverter.new(data_set).convert_back()      
     end
     
   end

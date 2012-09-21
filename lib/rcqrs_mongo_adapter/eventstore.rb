@@ -21,7 +21,11 @@ module RcqrsMongoAdapter
     end
     
     def restore(persisted_event)
-      eval(persisted_event["type"]).restore_from(persisted_event["data"])
+      eval(persisted_event["type"]).restore_from(convert_back(persisted_event["data"]))
+    end
+    
+    def convert_back(data)
+      RcqrsMongoAdapter::KeysToStringsConverter.new(data).convert_back
     end
     
   end  

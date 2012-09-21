@@ -28,6 +28,11 @@ describe RcqrsMongoAdapter::Readmodeldatabase do
     @readmodel_db.find(:some_model,{"lastname" => "de Putter"},{sort: :lastname})        
   end
   
+  it "converts the loaded data and returns it" do
+    @mongo.stub!(:find).and_return("name" => "jojo")
+    @readmodel_db.find(:some_model,{}).should == {:name => "jojo"}
+  end
+  
   it "allows to update data" do
     on_collection("some_model").should_do(:update).with({"lastname" => "de Putter"},{"lastname" => "Meyer"})
     @readmodel_db.update(:some_model,{lastname: "de Putter"},{lastname: "Meyer"})            
