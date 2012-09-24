@@ -13,18 +13,20 @@ module RcqrsMongoAdapter
       convert_back(@database.collection(readmodel.to_s).find_one(convert(parameters)))
     end
     
-    def find(readmodel,parameters,options = nil)
+    def find(readmodel,parameters = {},options = nil)
       if options  
-        convert_back(find_with_options(readmodel, parameters,options))
+        return convert_back(find_with_options(readmodel, parameters,options))
       else
-        convert_back(find_without_options(readmodel,parameters))        
+        return convert_back(find_without_options(readmodel,parameters))        
       end    
     end
     
     def find_with_options(readmodel, parameters, options)
+      result = @database.collection(readmodel.to_s).find(convert(parameters)) 
       options.each do |k,v|
-        @database.collection(readmodel.to_s).find(convert(parameters)).send(k,v)
-      end        
+        result = result.send(k,v)
+      end
+      return result        
     end
     
     def find_without_options(readmodel,parameters)
@@ -46,6 +48,9 @@ module RcqrsMongoAdapter
     end
     
     def convert_back(data_set)
+      if(data_set.is_a? Mongo::Cursor)
+        data_set = data_set.to_a
+      end
       RcqrsMongoAdapter::KeysToStringsConverter.new(data_set).convert_back()      
     end
     

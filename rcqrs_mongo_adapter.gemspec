@@ -19,8 +19,10 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "rspec"
+  s.add_development_dependency "pry"
   s.add_runtime_dependency "rcqrs"
   s.add_runtime_dependency "activemodel"
+  s.add_runtime_dependency "mongo"
 
   
 end

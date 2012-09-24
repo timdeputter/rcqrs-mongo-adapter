@@ -8,6 +8,8 @@
 require_relative "../lib/rcqrs_mongo_adapter"
 require_relative "dummy_mongo"
 
+require "pry"
+
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
