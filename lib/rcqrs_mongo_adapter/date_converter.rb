@@ -1,7 +1,8 @@
 module RcqrsMongoAdapter
   
-  class DateConverter
+  class DateConverter < RcqrsMongoAdapter::BaseConverter
     
+    converts Date
     
     def convert to_convert
       to_convert.to_time

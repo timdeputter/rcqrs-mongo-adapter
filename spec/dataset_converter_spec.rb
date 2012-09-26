@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe RcqrsMongoAdapter::DatasetConverter do
   
-  subject {RcqrsMongoAdapter::DatasetConverter.new(RcqrsMongoAdapter::SymbolsToStringsConverter.new, RcqrsMongoAdapter::DateConverter.new)}
+  subject {RcqrsMongoAdapter::DatasetConverter.new}
   
   context "Conversion of keys in data_sets to strings" do
   

@@ -1,6 +1,6 @@
 describe "conversion of Date objects into mongo friendly types" do
   
-  subject {RcqrsMongoAdapter::DateConverter.new}
+  subject {RcqrsMongoAdapter::DateConverter.new(nil)}
   
   it "converts dates into time objects" do
     subject.convert(Date.new(2012,2,2)).should == Time.new(2012,2,2)
