@@ -3,9 +3,9 @@ module RcqrsMongoAdapter
   class DatasetConverter
     
     def initialize()
-      @converters = [RcqrsMongoAdapter::HashConverter.new(self),
-        RcqrsMongoAdapter::ArrayConverter.new(self),
-        RcqrsMongoAdapter::DateConverter.new(self)]
+      @converters = [RcqrsMongoAdapter::HashConverter,
+        RcqrsMongoAdapter::ArrayConverter,
+        RcqrsMongoAdapter::DateConverter]
     end
     
     def convert data_set
@@ -15,24 +15,13 @@ module RcqrsMongoAdapter
     
     def get_converter_for clazz
       @converters.each do |c|
-         return c if(c.can_convert(clazz))
+         return c.new(self) if(c.can_convert(clazz))
       end
       return DefaultConverter.new
     end
     
     def convert_back data_set
       get_converter_for(data_set.class).convert_back(data_set)
-    end
-
-    def convert_keys data_set
-      if(data_set.is_a? Hash)
-        result = Hash.new
-        data_set.each{|k,v| result[do_key_conversion(k)] = convert_keys(v)}
-        return result      
-      elsif(data_set.is_a? Array)
-        return data_set.collect {|element| convert_keys(element)}
-      end 
-      return data_set
     end
     
     def do_key_conversion to_convert
