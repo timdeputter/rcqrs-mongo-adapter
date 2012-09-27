@@ -2,16 +2,13 @@ module RcqrsMongoAdapter
   
   class DatasetConverter
     
-    def initialize()
-      @converters = [RcqrsMongoAdapter::HashConverter,
-        RcqrsMongoAdapter::ArrayConverter,
-        RcqrsMongoAdapter::DateConverter]
+    def initialize(converters = RcqrsMongoAdapter::Converters)
+      @converters = converters
     end
     
     def convert data_set
       get_converter_for(data_set.class).convert(data_set)
     end
-    
     
     def get_converter_for clazz
       @converters.each do |c|

@@ -5,6 +5,7 @@ require "rcqrs_mongo_adapter/readmodeldatabase"
 require "rcqrs_mongo_adapter/version"
 require "rcqrs_mongo_adapter/dataset_converter"
 require "rcqrs_mongo_adapter/date_converter"
+require "rcqrs_mongo_adapter/converter_config"
 
 require "mongo"
 
