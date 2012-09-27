@@ -44,14 +44,14 @@ module RcqrsMongoAdapter
     private
     
     def convert(data_set)
-      RcqrsMongoAdapter::DatasetConverter.new(SymbolsToStringsConverter.new,RcqrsMongoAdapter::DateConverter.new).convert(data_set)
+      RcqrsMongoAdapter::DatasetConverter.new.convert(data_set)
     end
     
     def convert_back(data_set)
       if(data_set.is_a? Mongo::Cursor)
         data_set = data_set.to_a
       end
-      RcqrsMongoAdapter::DatasetConverter.new(SymbolsToStringsConverter.new, RcqrsMongoAdapter::DateConverter.new).convert_back(data_set)      
+      RcqrsMongoAdapter::DatasetConverter.new.convert_back(data_set)      
     end
     
   end

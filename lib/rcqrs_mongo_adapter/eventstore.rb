@@ -25,7 +25,7 @@ module RcqrsMongoAdapter
     end
     
     def convert_back(data)
-      RcqrsMongoAdapter::DatasetConverter.new(SymbolsToStringsConverter.new,RcqrsMongoAdapter::DateConverter.new).convert_back data
+      RcqrsMongoAdapter::DatasetConverter.new.convert_back data
     end
     
   end  

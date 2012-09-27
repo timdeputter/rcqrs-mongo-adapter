@@ -3,7 +3,9 @@ module RcqrsMongoAdapter
   class DatasetConverter
     
     def initialize()
-      @converters = [RcqrsMongoAdapter::HashConverter.new(self),RcqrsMongoAdapter::DateConverter.new(self)]
+      @converters = [RcqrsMongoAdapter::HashConverter.new(self),
+        RcqrsMongoAdapter::ArrayConverter.new(self),
+        RcqrsMongoAdapter::DateConverter.new(self)]
     end
     
     def convert data_set
@@ -19,7 +21,7 @@ module RcqrsMongoAdapter
     end
     
     def convert_back data_set
-      get_converter_for(data_set.class).convert(data_set)
+      get_converter_for(data_set.class).convert_back(data_set)
     end
 
     def convert_keys data_set
@@ -84,11 +86,11 @@ module RcqrsMongoAdapter
     converts Array
     
     def convert array
-      array.collect {|element| @converters.convert(element)}
+      array.collect {|element| @converters.convert(element)}.to_a
     end
     
     def convert_back array
-      array.collect {|element| @converters.convert_back(element)}      
+      array.collect {|element| @converters.convert_back(element)}.to_a      
     end
     
   end
