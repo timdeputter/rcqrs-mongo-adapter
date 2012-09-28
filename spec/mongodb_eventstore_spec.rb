@@ -20,7 +20,7 @@ describe RcqrsMongoAdapter::Eventstore do
     @store.store("aggregate",TestEvent.new(name: "Tim"))
     inserted_data = @mongo.data
     inserted_data["aggregate_id"].should == "aggregate"
-    inserted_data["data"].should == {name: "Tim"}
+    inserted_data["data"].should == {"name" => "Tim"}
     inserted_data["created_at"].should be_a Time
     inserted_data["type"].should == "TestEvent"
   end

@@ -10,7 +10,7 @@ module RcqrsMongoAdapter
     def store(aggregate_id, event)
       s = Hash.new
       s["aggregate_id"] = aggregate_id
-      s["data"] = event.data
+      s["data"] = convert(event.data)
       s["created_at"] = Time.new
       s["type"] = event.class.to_s
       @stored_events.insert(s)
@@ -24,7 +24,11 @@ module RcqrsMongoAdapter
       eval(persisted_event["type"]).restore_from(convert_back(persisted_event["data"]))
     end
     
-    def convert_back(data)
+    def convert data
+      RcqrsMongoAdapter::DatasetConverter.new.convert data      
+    end
+    
+    def convert_back data
       RcqrsMongoAdapter::DatasetConverter.new.convert_back data
     end
     
