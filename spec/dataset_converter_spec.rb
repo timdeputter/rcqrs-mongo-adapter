@@ -46,16 +46,8 @@ describe RcqrsMongoAdapter::DatasetConverter do
   
   context "conversion of dates" do
   
-    it "creates time instances" do
-      subject.convert([{date: Date.new(2013,3,3)}]).should == [{"date" => Time.new(2013,3,3)}]
-    end
-  
-    it "back creates date instances" do
-      subject.convert_back([{"date" => Time.new(2013,3,3)}]).should == [{date: Date.new(2013,3,3)}]      
-    end
-    
-    it "returns the time if the object is not a valid date" do
-      subject.convert_back([{"date" => Time.new(2013,3,3,3,3,3)}]).should == [{date: Time.new(2013,3,3,3,3,3)}]      
+    it "converts dates" do
+      subject.convert_back(subject.convert([{date: Date.new(2013,3,3)}])).should == [{date: Date.new(2013,3,3)}]
     end
   end
   

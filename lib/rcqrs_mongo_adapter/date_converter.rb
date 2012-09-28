@@ -6,12 +6,11 @@ module RcqrsMongoAdapter
     into Time
     
     def convert to_convert
-      to_convert.to_time
+      Time.new(to_convert.year,to_convert.month,to_convert.day,12,0,0)
     end
   
     def convert_back to_convert
-      return to_convert.to_date if(to_convert.sec == 0 && to_convert.min == 0 && to_convert.hour == 0)
-      to_convert
+      to_convert.to_date
     end
       
   end

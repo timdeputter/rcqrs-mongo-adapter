@@ -14,11 +14,13 @@ module RcqrsMongoAdapter
     end
     
     def find(readmodel,parameters = {},options = nil)
+      result = nil
       if options  
-        return convert_back(find_with_options(readmodel, parameters,options))
+        result = convert_back(find_with_options(readmodel, parameters,options))
       else
-        return convert_back(find_without_options(readmodel,parameters))        
-      end    
+        result = convert_back(find_without_options(readmodel,parameters))        
+      end
+      result    
     end
     
     def find_with_options(readmodel, parameters, options)
