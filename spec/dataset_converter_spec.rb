@@ -54,6 +54,9 @@ describe RcqrsMongoAdapter::DatasetConverter do
       subject.convert_back([{"date" => Time.new(2013,3,3)}]).should == [{date: Date.new(2013,3,3)}]      
     end
     
+    it "returns the time if the object is not a valid date" do
+      subject.convert_back([{"date" => Time.new(2013,3,3,3,3,3)}]).should == [{date: Time.new(2013,3,3,3,3,3)}]      
+    end
   end
   
 end
