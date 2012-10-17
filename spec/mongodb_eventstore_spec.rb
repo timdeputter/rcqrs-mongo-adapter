@@ -12,12 +12,12 @@ describe RcqrsMongoAdapter::Eventstore do
   end
     
   it "stores events in a StoredEvents collection" do
-    @store.store("aggregate",TestEvent.new)
+    @store.store([Rcqrs::PublishedEvent.new("aggregate",TestEvent.new)])
     @mongo.name.should == "StoredEvents"
   end
   
-  it "creates a dataset with the aggregate-id,create_time and the type of the event" do
-    @store.store("aggregate",TestEvent.new(name: "Tim"))
+  it "creates a dataset with the aggregate-id,data,create_time and the type of the event if only a single event is stored" do
+    @store.store([published_event("aggregate",TestEvent.new(name: "Tim"))])
     inserted_data = @mongo.data
     inserted_data["aggregate_id"].should == "aggregate"
     inserted_data["data"].should == {"name" => "Tim"}
@@ -25,7 +25,23 @@ describe RcqrsMongoAdapter::Eventstore do
     inserted_data["type"].should == "TestEvent"
   end
   
-  context "querying of events" do
+  it "creates one dataset for all events of a aggregate when multiple events are passed in" do
+    @store.store([published_event("aggregate",TestEvent.new(name: "Tim")),
+      published_event("aggregate",TestEvent.new(name: "Jim"))])    
+    inserted_data = @mongo.data
+    inserted_data["aggregate_id"].should == "aggregate"
+    inserted_data["data"].should ==nil      
+    inserted_data["created_at"].should be_a Time
+    events = inserted_data["events"]
+    events[0].should == {"type" => "TestEvent", "data" => {"name" => "Tim"}}
+    events[1].should == {"type" => "TestEvent", "data" => {"name" => "Jim"}}
+  end
+  
+  def published_event(aggregate_id,event)
+    Rcqrs::PublishedEvent.new(aggregate_id,event)
+  end
+  
+  context "querying for a single event" do
     
     before do
       @mongo.data = {"data" => {"name" => "tim"}, "type" => "TestEvent"}
@@ -47,5 +63,16 @@ describe RcqrsMongoAdapter::Eventstore do
     
   end
   
+  context "querying for multiple events" do
+    
+    before do
+      @mongo.data = {"events" => [{"data" => {"name" => "tim"}, "type" => "TestEvent"}]}
+    end
+    
+    it "restores the events" do
+      @store.load_events("aggregate_id").should == [TestEvent.new(name: "tim")]      
+    end
+
+  end
   
 end
