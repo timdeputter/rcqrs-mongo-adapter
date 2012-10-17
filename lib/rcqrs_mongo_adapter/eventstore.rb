@@ -17,11 +17,10 @@ module RcqrsMongoAdapter
     
     def store_single_event(event)
         s = Hash.new
-        published_event = event
-        s["aggregate_id"] = published_event.aggregate_id
-        s["data"] = convert(published_event.event.data)
+        s["aggregate_id"] = event.aggregate_id
+        s["data"] = convert(event.event.data)
         s["created_at"] = Time.new
-        s["type"] = published_event.event.class.to_s
+        s["type"] = event.event.class.to_s
         @stored_events.insert(s)
     end
     
