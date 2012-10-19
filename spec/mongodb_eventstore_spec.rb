@@ -26,17 +26,26 @@ describe RcqrsMongoAdapter::Eventstore do
   end
   
   it "creates one dataset for all events of a aggregate when multiple events are passed in" do
-    @store.store([published_event("aggregate",TestEvent.new(name: "Tim")),
-      published_event("aggregate",TestEvent.new(name: "Jim"))])    
+    tim = TestEvent.new(name: "Tim")
+    jim = TestEvent.new(name: "Jim")
+    @store.store([published_event("aggregate",tim),
+      published_event("aggregate",jim)])    
     inserted_data = @mongo.data
     inserted_data["aggregate_id"].should == "aggregate"
     inserted_data["data"].should ==nil      
     inserted_data["created_at"].should be_a Time
     events = inserted_data["events"]
-    events[0].should == {"type" => "TestEvent", "data" => {"name" => "Tim"}}
-    events[1].should == {"type" => "TestEvent", "data" => {"name" => "Jim"}}
+    events[0].should == {"type" => "TestEvent", "published_at" => tim.published_at, "data" => {"name" => "Tim"}}
+    events[1].should == {"type" => "TestEvent", "published_at" => jim.published_at, "data" => {"name" => "Jim"}}
   end
   
+  it "stores the published time in a published_at column" do
+    test_event = TestEvent.new(name: "Tim")
+    test_event.store_publish_time
+    @store.store([published_event("aggregate",test_event)])    
+    @mongo.data["published_at"].should == test_event.published_at
+  end
+    
   def published_event(aggregate_id,event)
     Rcqrs::PublishedEvent.new(aggregate_id,event)
   end

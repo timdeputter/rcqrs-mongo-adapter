@@ -21,6 +21,7 @@ module RcqrsMongoAdapter
         s["data"] = convert(event.event.data)
         s["created_at"] = Time.new
         s["type"] = event.event.class.to_s
+        s["published_at"] = event.event.published_at
         @stored_events.insert(s)
     end
     
@@ -41,7 +42,7 @@ module RcqrsMongoAdapter
     def store_events_for_aggregate(aggregate_id,events)
         record = Hash.new
         record["aggregate_id"] = aggregate_id
-        record["events"] = events.collect{|e| {"type" => e.class.to_s, "data" => convert(e.data)}}
+        record["events"] = events.collect{|e| {"type" => e.class.to_s,"published_at" =>e.published_at,  "data" => convert(e.data)}}
         record["created_at"] = Time.new
         @stored_events.insert(record)
     end
