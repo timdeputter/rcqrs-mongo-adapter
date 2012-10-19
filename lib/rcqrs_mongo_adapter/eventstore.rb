@@ -67,7 +67,7 @@ module RcqrsMongoAdapter
     end
     
     def restore_event(persisted_event)
-      eval(persisted_event["type"]).restore_from(convert_back(persisted_event["data"]))
+      eval(persisted_event["type"]).restore_from(convert_back(persisted_event["data"]),persisted_event["published_at"])
     end
     
     def convert data

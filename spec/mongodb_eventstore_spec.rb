@@ -53,7 +53,7 @@ describe RcqrsMongoAdapter::Eventstore do
   context "querying for a single event" do
     
     before do
-      @mongo.data = {"data" => {"name" => "tim"}, "type" => "TestEvent"}
+      @mongo.data = {"data" => {"name" => "tim"},"published_at"=> DateTime.new(2012,2,2), "type" => "TestEvent"}
     end
         
     it "queries for the events for the given aggregate_id" do
@@ -67,7 +67,8 @@ describe RcqrsMongoAdapter::Eventstore do
     end
     
     it "restores the events" do
-      @store.load_events("aggregate_id").should == [TestEvent.new(name: "tim")]      
+      @store.load_events("aggregate_id").should == [TestEvent.new(name: "tim")]
+      @store.load_events("aggregate_id").first.published_at.should == DateTime.new(2012,2,2)    
     end
     
   end
