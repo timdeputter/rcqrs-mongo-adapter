@@ -6,7 +6,11 @@ module RcqrsMongoAdapter
     def initialize(mongodb)
       @stored_events = mongodb.collection("StoredEvents")
     end
-    
+     
+    def load_events(aggregate_id)
+      return @stored_events.find("aggregate_id" => aggregate_id).sort("created_at").to_a.collect {|persisted_event| restore(persisted_event)}.flatten
+    end
+   
     def store(events)
       if(events.size == 1)
         store_single_event(events.first)
@@ -14,6 +18,8 @@ module RcqrsMongoAdapter
         store_multiple_events(events)
       end  
     end
+    
+    private
     
     def store_single_event(event)
         s = Hash.new
@@ -52,10 +58,6 @@ module RcqrsMongoAdapter
         hash[event.aggregate_id] = Array.new
       end
       hash[event.aggregate_id] << event.event
-    end
-    
-    def load_events(aggregate_id)
-      return @stored_events.find("aggregate_id" => aggregate_id).sort("created_at").to_a.collect {|persisted_event| restore(persisted_event)}.flatten
     end
     
     def restore(record)
