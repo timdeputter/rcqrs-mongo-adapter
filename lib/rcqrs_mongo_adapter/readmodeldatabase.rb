@@ -43,6 +43,10 @@ module RcqrsMongoAdapter
       @database.collection(readmodel.to_s).remove(convert(selector))
     end
     
+    def count(readmodel,selector)
+      @database.collection(readmodel.to_s).count(convert(selector))      
+    end
+    
     private
     
     def convert(data_set)

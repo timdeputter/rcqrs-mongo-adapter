@@ -45,6 +45,11 @@ describe RcqrsMongoAdapter::Readmodeldatabase do
     @readmodel_db.delete_all(:some_model,{lastname: "de Putter"})                
   end
   
+  it "allows to count entries in a readmodel" do
+    on_collection("some_model").should_do(:count).with({"lastname" => "de Putter"})
+    @readmodel_db.count(:some_model,{lastname: "de Putter"})    
+  end
+  
   def on_collection(collection)
     @mongo.should_receive(:collection).with(collection)
     self    
