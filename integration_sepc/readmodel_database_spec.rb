@@ -13,12 +13,12 @@ describe "readmodel" do
     @readmodel_database.find(:readmodel_test, {test:"data"}).first[:test].should == "data"
   end
   
-  it "allows to store date objects" do
+  pending "allows to store date objects" do
     @readmodel_database.insert(:readmodel_test,{test:"data", some_date: Date.new(2013,3,3)})
     @readmodel_database.find(:readmodel_test, {test:"data"}).first[:some_date].should == Date.new(2013,3,3)    
   end
   
-  it "allows to find objects by date" do
+  pending "allows to find objects by date" do
     @readmodel_database.insert(:readmodel_test,{test:"data", some_date: Date.new(2013,3,3)})    
     @readmodel_database.find(:readmodel_test, {some_date: Date.new(2013,3,3)}).first[:test].should == "data"    
   end
