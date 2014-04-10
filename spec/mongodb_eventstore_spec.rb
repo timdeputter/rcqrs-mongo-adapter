@@ -45,6 +45,11 @@ describe RcqrsMongoAdapter::Eventstore do
     @store.store([published_event("aggregate",test_event)])    
     @mongo.data["published_at"].should == test_event.published_at
   end
+
+  it "sets the journaling flag for durable writing" do
+    @store.store([published_event("aggregate",TestEvent.new(name: "Tim"))])
+    @mongo.options.should include({w:1, j: true})
+  end
     
   def published_event(aggregate_id,event)
     Rcqrs::PublishedEvent.new(aggregate_id,event)
